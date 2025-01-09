@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const assert = require('assert');
-const request = require('got');
-const {execSync} = require('child_process');
-const {GoogleAuth} = require('google-auth-library');
+import assert from 'assert';
+import {execSync} from 'child_process';
+import request from 'got';
+import {GoogleAuth} from 'google-auth-library';
 const auth = new GoogleAuth();
 
 const get = (route, base_url) => {
@@ -62,7 +62,7 @@ describe('End-to-End Tests', () => {
     if (SAMPLE_VERSION) buildCmd += `,_VERSION=${SAMPLE_VERSION}`;
 
     console.log('Starting Cloud Build...');
-    execSync(buildCmd);
+    execSync(buildCmd, {timeout: 240000}); // timeout at 4 mins
     console.log('Cloud Build completed.');
 
     // Retrieve URL of Cloud Run service
