@@ -13,7 +13,6 @@
 // limitations under the License.
 
 // [START cloudrun_secure_request]
-// [START run_secure_request]
 const {GoogleAuth} = require('google-auth-library');
 const got = require('got');
 const auth = new GoogleAuth();
@@ -46,7 +45,7 @@ const renderRequest = async markdown => {
     serviceRequestOptions.headers['Authorization'] =
       clientHeaders['Authorization'];
   } catch (err) {
-    throw Error('could not create an identity token: ', err);
+    throw Error('could not create an identity token: ' + err.message);
   }
 
   try {
@@ -54,11 +53,10 @@ const renderRequest = async markdown => {
     const serviceResponse = await got(serviceUrl, serviceRequestOptions);
     return serviceResponse.body;
   } catch (err) {
-    throw Error('request to rendering service failed: ', err);
+    throw Error('request to rendering service failed: ' + err.message);
   }
 };
 
-// [END run_secure_request]
 // [END cloudrun_secure_request]
 
 module.exports = renderRequest;

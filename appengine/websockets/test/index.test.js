@@ -16,14 +16,14 @@
 
 const assert = require('assert');
 const path = require('path');
-const app = require(path.join(path.dirname(__dirname), 'app.js'));
 const puppeteer = require('puppeteer');
+const app = require(path.join(path.dirname(__dirname), 'app.js'));
 /* global document */
 
 let browser, browserPage;
 
 before(async () => {
-  const PORT = process.env.PORT || 8080;
+  const PORT = parseInt(process.env.PORT) || 8080;
   app.listen(PORT, () => {});
 
   browser = await puppeteer.launch({
@@ -38,6 +38,25 @@ after(async () => {
 });
 
 describe('appengine_websockets_app', () => {
+  it('should process chat message', async () => {
+    await browserPage.goto('http://localhost:8080');
+
+    await browserPage.evaluate(() => {
+      document.querySelector('input').value = 'test';
+      document.querySelector('button').click();
+    });
+
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    const itemText = await browserPage.evaluate(
+      () => document.querySelector('li').textContent
+    );
+
+    assert.strictEqual(itemText, 'test');
+  });
+});
+
+describe('gae_websockets_app', () => {
   it('should process chat message', async () => {
     await browserPage.goto('http://localhost:8080');
 

@@ -14,6 +14,7 @@
 
 'use strict';
 
+// [START gae_websockets_app]
 // [START appengine_websockets_app]
 const app = require('express')();
 app.set('view engine', 'pug');
@@ -32,12 +33,13 @@ io.on('connection', socket => {
 });
 
 if (module === require.main) {
-  const PORT = process.env.PORT || 8080;
+  const PORT = parseInt(process.env.PORT) || 8080;
   server.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`);
     console.log('Press Ctrl+C to quit.');
   });
 }
 // [END appengine_websockets_app]
+// [END gae_websockets_app]
 
 module.exports = server;
