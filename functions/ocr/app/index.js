@@ -41,8 +41,7 @@ const translate = new Translate();
 const publishResult = async (topicName, data) => {
   const dataBuffer = Buffer.from(JSON.stringify(data));
 
-  const [topic] = await pubsub.topic(topicName).get({autoCreate: true});
-  topic.publish(dataBuffer);
+  pubsub.topic(topicName).publishMessage(dataBuffer);
 };
 
 // [START functions_ocr_detect]
@@ -59,7 +58,7 @@ const detectText = async (bucketName, filename) => {
     `gs://${bucketName}/${filename}`
   );
   const [annotation] = textDetections.textAnnotations;
-  const text = annotation ? annotation.description : '';
+  const text = annotation ? annotation.description.trim() : '';
   console.log('Extracted text from image:', text);
 
   let [translateDetection] = await translate.detect(text);

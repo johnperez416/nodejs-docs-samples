@@ -41,7 +41,7 @@ app.get('/', async (req, res) => {
     if (!renderedHtml) renderedHtml = await buildRenderedHtml();
     res.status(200).send(renderedHtml);
   } catch (err) {
-    console.log('Error loading the Editor service: ', err);
+    console.error('Error loading the Editor service: ', err);
     res.status(500).send(err);
   }
 });
@@ -49,18 +49,16 @@ app.get('/', async (req, res) => {
 // The renderRequest makes a request to the Renderer service.
 // The request returns the Markdown text converted to HTML.
 // [START cloudrun_secure_request_do]
-// [START run_secure_request_do]
 app.post('/render', async (req, res) => {
   try {
     const markdown = req.body.data;
     const response = await renderRequest(markdown);
     res.status(200).send(response);
   } catch (err) {
-    console.log('error: markdown rendering:', err);
+    console.error('Error rendering markdown:', err);
     res.status(500).send(err);
   }
 });
-// [END run_secure_request_do]
 // [END cloudrun_secure_request_do]
 
 // Exports for testing purposes.
